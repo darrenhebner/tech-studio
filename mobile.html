@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Mobile Socket Test</title>
+</head>
+<body>
+	This is the mobile page!
+	<input type="text" id="text">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+	<script>
+		var socket = io.connect();
+	</script>
+	<script>
+		$(document).ready(function(){
+		    $('#text').keypress(function(e){
+		      socket.emit('client_data', {'letter': String.fromCharCode(e.charCode)});
+		    });
+  		});
+
+  		if (window.DeviceOrientationEvent) {
+  			window.addEventListener('deviceorientation', function(eventData){
+  				var tiltLR = eventData.gamma;
+  				var tiltFB = eventData.beta;
+  				var dir = eventData.alpha
+
+  				socket.emit('deviceMove', {'lr': tiltLR, 'fb': tiltFB, 'dir': dir});
+
+  				DeviceOrientationHandler(tiltLR, tiltFB, dir);
+  			}, false);
+  		} else {
+  			alert("not supported");
+  		}
+	</script>
+</body>
+</html>
