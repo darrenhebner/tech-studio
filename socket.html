@@ -9,56 +9,71 @@
 			padding: 0;
 			box-sizing: border-box;
 		}
+		#stats{
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
 	</style>
 </head>
 <body>
-	Left-right: <span id="lr"></span><br>
-	Front-back: <span id="fb"></span><br>
-	Direction: <span id="dir"></span>
+	<div id="stats">
+		Left-right: <span id="lr"></span><br>
+		Front-back: <span id="fb"></span><br>
+		Direction: <span id="dir"></span>
+	</div>
 
-		
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
 	<script>
-		var scene, camera, renderer;
- 
- init();
- animate();
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
- function init() {
- 	scene = new THREE.Scene();
- 	var WIDTH = window.innerWidth,
- 		HEIGHT = window.innerHeight;
+		var renderer = new THREE.WebGLRenderer({alpha: true});
+		renderer.setClearColor( 0xEEEEEE, 1);
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		document.body.appendChild( renderer.domElement );
 
- 	renderer = new THREE.WebGLRenderer({antialias:true});
- 	renderer.setSize(WIDTH, HEIGHT);
- 	document.body.appendChild(renderer.domElement);
+		var geometry = new THREE.PlaneGeometry( 60, 60, 20, 20 );
+		geometry.__dirtyVertices = true;
+		geometry.dynamic = true;
 
- 	camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 20000);
- 	camera.position.set(0,6,0);
- 	scene.add(camera);
+		for (var i = 0, l = geometry.vertices.length; i < l; i++) {
+		  geometry.vertices[i].z = 2 * Math.random();
+		}
+		
 
- 	window.addEventListender('resize', function() {
- 		var WIDTH = window.innerWidth,
- 			HEIGHT = window.innerHeight;
- 		renderer.setSize(WIDTH, HEIGHT);
- 		camera.aspect = WIDTH / HEIGHT;
- 		camera.updateProjectionMatrix();
- 	});
+		var material = new THREE.MeshBasicMaterial({
+	        color : 0x666666,
+	        wireframe : true
+    	});
 
- 	renderer.setClearColorHex(0x33F47, 1);
+		var plane = new THREE.Mesh( geometry, material );
+		scene.add( plane );
+		plane.rotation.x = 90;
 
- 	var light = new THREE.PointLight(0xffffff);
- 	light.position.set(-100,200,100);
- 	scene.add(light);
+		camera.position.z = 60;
 
- 	renderer.render(scene, camera);
- 	controls.update;
+		var dir;
+		var socket = io.connect();
+		socket.on('deviceData', function(data){
+			var lr = Math.ceil(data.lr);
+			var fb = Math.ceil(data.fb);
+			dir = Math.ceil(data.dir);
+			setTimeout(function() {
+				plane.rotation.z += ((dir * 0.06) - plane.rotation.z)*0.05;
+			}, 60);
+		})
 
- }
+		console.log(plane);
+
+		function render() {
+			requestAnimationFrame( render );
+			renderer.render( scene, camera );
+		}
+		render();
 	</script>
-
 	<script>
 		var dir;
 		var socket = io.connect();
@@ -69,7 +84,6 @@
 			var lr = Math.ceil(data.lr);
 			var fb = Math.ceil(data.fb);
 			dir = Math.ceil(data.dir);
-
 			$("#lr").text(lr);
 			$("#fb").text(fb);
 			$("#dir").text(dir);
