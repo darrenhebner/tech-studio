@@ -4,7 +4,7 @@ var http = require("http"),
 	io = require("socket.io");
 
 var server = http.createServer(function(request, response){
-	var path = url.parse(request.url).pathname;
+var path = url.parse(request.url).pathname;
 
 	switch(path){
 		case '/':
@@ -31,7 +31,7 @@ var server = http.createServer(function(request, response){
 				if (error){
 					response.writeHead(404);
 					response.write("oops this doesn't exist - 404");
-					reponse.end();
+					response.end();
 				}
 				else{
 					response.writeHead(200, {'Content-Type': "text/html"});
@@ -39,6 +39,20 @@ var server = http.createServer(function(request, response){
 					response.end();
 				}
 			});
+			break;
+		case '/scripts/visualization.js':
+			fs.readFile(__dirname + path, function(error, data) {
+				if (error){
+					response.writeHead(404);
+					response.write("oops this doesn't exist - 404");
+					response.end();
+				}
+				else {
+					response.writeHead(200, {'Content-Type': "text/html"});
+					response.write(data, "utf8");
+					response.end();
+				}
+			})
 			break;
 		default:
 			response.writeHead(404);
