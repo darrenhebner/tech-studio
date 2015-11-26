@@ -27,20 +27,24 @@
 	<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
 	<script src="scripts/visualization.js"></script>
+	<script src="scripts/audio.js"></script>
 	<script>
-		var dir;
-		var socket = io.connect();
-		socket.on('message', function(data){
-    		console.log(data.letter);
-		});
-		socket.on('deviceData', function(data){
-			var lr = Math.ceil(data.lr);
-			var fb = Math.ceil(data.fb);
-			dir = Math.ceil(data.dir);
-			$("#lr").text(lr);
-			$("#fb").text(fb);
-			$("#dir").text(dir);
-		})
+		// var dir;
+		// var socket = io.connect();
+		// socket.on('message', function(data){
+  //   		console.log(data.letter);
+		// });
+		// socket.on('deviceData', function(data){
+		// 	var lr = Math.ceil(data.lr);
+		// 	var fb = Math.ceil(data.fb);
+		// 	dir = Math.ceil(data.dir);
+		// 	$("#lr").text(lr);
+		// 	$("#fb").text(fb);
+		// 	$("#dir").text(dir);
+
+		// 	oscillator.frequency.value = fb * 50;
+		// 	console.log(oscillator.frequency.value);
+		// })
 	</script>
 </body>
 </html>
