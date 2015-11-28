@@ -20,6 +20,14 @@
 		    });
   		});
 
+  		document.addEventListener("touchstart", function() {
+  			socket.emit('playMusic', {'play': true});
+  		}, false);
+
+  		document.addEventListener("touchend", function() {
+  			socket.emit('playMusic', {'play': false});
+  		}, false)
+
   		if (window.DeviceOrientationEvent) {
   			window.addEventListener('deviceorientation', function(eventData){
   				var tiltLR = eventData.gamma;

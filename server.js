@@ -88,4 +88,8 @@ listener.sockets.on('connection', function(socket){
     socket.on('deviceMove', function(data){
     	socket.broadcast.emit('deviceData', data);
     })
+
+    socket.on('playMusic', function(data) {
+    	socket.broadcast.emit('play', data);
+    })
 });
