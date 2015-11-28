@@ -75,25 +75,28 @@ socket.on('deviceData', function(data){
 	$("#fb").text(fb);
 	$("#dir").text(dir);
 
+	//gainNode.gain.value = lr;
+
+	var portamento = 0.3;
 	setTimeout(function() {
 		if ( fb < 60) {
-			oscillator.frequency.value = notes.g2;
-			oscillator2.frequency.value = notes.b3;
-			oscillator3.frequency.value = notes.d4;
-			oscillator4.frequency.value = (notes.fSharp4 - oscillator4.frequency.value) * 0.1;
-			oscillator5.frequency.value = (notes.g4 - oscillator5.frequency.value) * 0.1;
+			oscillator.frequency.value += (notes.g2 - oscillator.frequency.value) * portamento;
+			oscillator2.frequency.value += (notes.b3 - oscillator2.frequency.value) * portamento;
+			oscillator3.frequency.value += (notes.d4 - oscillator3.frequency.value) * portamento;
+			oscillator4.frequency.value += (notes.fSharp4 - oscillator4.frequency.value) * portamento;
+			oscillator5.frequency.value += (notes.g4 - oscillator5.frequency.value) * portamento;
 		} else if ( fb > 60 && fb < 120 ) {
-			oscillator.frequency.value = notes.b2;
-			oscillator2.frequency.value = notes.b3;
-			oscillator3.frequency.value = notes.d4;
-			oscillator4.frequency.value = (notes.fSharp4 - oscillator4.frequency.value) * 0.1;
-			oscillator5.frequency.value += (notes.a4 - oscillator5.frequency.value) * 0.1;
+			oscillator.frequency.value += (notes.b2 - oscillator.frequency.value) * portamento;
+			oscillator2.frequency.value += (notes.b3 - oscillator2.frequency.value) * portamento;
+			oscillator3.frequency.value += (notes.d4 - oscillator3.frequency.value) * portamento;
+			oscillator4.frequency.value += (notes.fSharp4 - oscillator4.frequency.value) * portamento;
+			oscillator5.frequency.value += (notes.a4 - oscillator5.frequency.value) * portamento;
 		} else if ( fb > 120 ) {
-			oscillator.frequency.value = notes.a2;
-			oscillator2.frequency.value = notes.a3;
-			oscillator3.frequency.value = notes.cSharp4;
-			oscillator4.frequency.value = (notes.e4 - oscillator4.frequency.value) * 0.1;
-			oscillator5.frequency.value = (notes.fSharp4 - oscillator5.frequency.value) * 0.1;
+			oscillator.frequency.value += (notes.a2 - oscillator.frequency.value) * portamento;
+			oscillator2.frequency.value += (notes.a3 - oscillator2.frequency.value) * portamento;
+			oscillator3.frequency.value += (notes.cSharp4 - oscillator3.frequency.value) * portamento;
+			oscillator4.frequency.value += (notes.e4 - oscillator4.frequency.value) * portamento;
+			oscillator5.frequency.value += (notes.fSharp4 - oscillator5.frequency.value) * portamento;
 		}
 	}, 60);
 	biquadFilter.frequency.value = lr;
