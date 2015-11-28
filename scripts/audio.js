@@ -68,14 +68,14 @@ socket.on('message', function(data){
     console.log(data.letter);
 });
 socket.on('deviceData', function(data){
-	var lr = Math.ceil(data.lr);
+	var lr = Math.ceil(data.lr) + 180; // to offset the -180deg
 	var fb = Math.ceil(data.fb) + 90; // to offset the -90deg
 	dir = Math.ceil(data.dir);
 	$("#lr").text(lr);
 	$("#fb").text(fb);
 	$("#dir").text(dir);
 
-	//gainNode.gain.value = lr;
+	gainNode.gain.value = lr / 360; //set volume with max 0.5
 
 	var portamento = 0.3;
 	setTimeout(function() {
