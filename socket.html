@@ -6,17 +6,10 @@
 	<link rel="stylesheet" href="styles/style.css">
 </head>
 <body id="app">
-	<!-- <div class="intro-container" v-show="intro">
-		<div class="intro-inner">
-			<h1 class="intro-logo">Conductor</h1>
-			<p>Conductor is a multi-screen experience. To begin, visit conductor.io/mobile on your mobile device</p>
-
-			<button @click="intro = !intro">Continue</button>
-		</div>
-	</div> -->
-
 	<div class="main-container">
 		<h1 class="main-logo">Conductor</h1>
+
+		<!-- SVG shapes -->
 		<svg id="circle" width="580" height="400">
 			<g>
 				<path id="svg_1" d="m131,200c0,-87.84531 71.15469,-159 159,-159c87.84531,0 159,71.15469 159,159c0,87.84531 -71.15469,159 -159,159c-87.84531,0 -159,-71.15469 -159,-159z" stroke-opacity="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="50" stroke="#67657A" fill-opacity="null" fill="none"/>
@@ -38,6 +31,7 @@
 		<button id="about-btn" @click="about = !about">About</button>
 	</div>
 
+	<!-- Begin about container -->
 	<div class="about-container" v-show="about" transition="slide">
 		<div class="about-inner">
 			<div class="about-inner-left">

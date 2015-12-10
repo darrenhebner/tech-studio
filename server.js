@@ -5,7 +5,8 @@ var http = require("http"),
 
 var server = http.createServer(function(request, response){
 var path = url.parse(request.url).pathname;
-
+	
+	// routing
 	switch(path){
 		case '/':
 			response.writeHead(200, {'Content-Type': 'text/html'});
@@ -104,17 +105,17 @@ var path = url.parse(request.url).pathname;
 	}
 });
 
+// listen to port 8001
 server.listen(8001);
 
 var listener = io.listen(server);
 listener.sockets.on('connection', function(socket){
-    socket.on('client_data', function(data){
-    
-    });
+	// when server recieves deviceorientation data, broadcast it to socket.html file
     socket.on('deviceMove', function(data){
     	socket.broadcast.emit('deviceData', data);
     })
 
+    // when server recieves playMusic data, broadcast it to socket.html file
     socket.on('playMusic', function(data) {
     	socket.broadcast.emit('play', data);
     	socket.emit('connect', {'init': true});

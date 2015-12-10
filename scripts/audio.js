@@ -3,6 +3,8 @@ var audioCtx, oscillator, oscillator2, oscillator3, oscillator4, oscillator5, ga
 
 function init() {
 	audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+	//create oscillators
 	oscillator = audioCtx.createOscillator();
 	oscillator2 = audioCtx.createOscillator();
 	oscillator3 = audioCtx.createOscillator();
@@ -15,9 +17,11 @@ function init() {
 	oscillatord4 = audioCtx.createOscillator();
 	oscillatord5 = audioCtx.createOscillator();
 
+	//create gainNode and set it's value to 0
 	gainNode = audioCtx.createGain();
-	gainNode.gain.value = 0; //reduce the volume by half
+	gainNode.gain.value = 0;
 
+	//connect it all together
 	oscillator.connect(gainNode);
 	oscillator2.connect(gainNode);
 	oscillator3.connect(gainNode);
@@ -32,7 +36,8 @@ function init() {
 
 	gainNode.connect(audioCtx.destination);
 
-	oscillator.type = 'sawtooth'; // sine wave — other values are 'square', 'sawtooth', 'triangle' and 'custom'
+	// configure oscillators
+	oscillator.type = 'sawtooth'; // wave type
 	oscillator.frequency.value = 440; // value in hertz
 	oscillator.start();
 
@@ -52,9 +57,9 @@ function init() {
 	oscillator5.frequency.value = 550;
 	oscillator5.start();
 
-	oscillatord.type = 'sawtooth'; // sine wave — other values are 'square', 'sawtooth', 'triangle' and 'custom'
-	oscillatord.frequency.value = 440; // value in hertz
-	oscillatord.detune.value = 10;
+	oscillatord.type = 'sawtooth'; 
+	oscillatord.frequency.value = 440; 
+	oscillatord.detune.value = 10; // detune value will add character to the synth tone
 	oscillatord.start();
 
 	oscillatord2.type = 'sine';
@@ -79,6 +84,7 @@ function init() {
 	
 }
 
+// colection of pitches in hertz 
 var notes = {
 			g2: 98,
 			b3: 246.9,
@@ -93,9 +99,12 @@ var notes = {
 			g3: 196
 		};
 
+
+// connect socket
 var dir;
 var socket = io.connect();
 
+// play is broadcast, turn gain up to 0.1. Otherwise gain is 0.
 socket.on('play', function(data) {
 	if (data.play) {
 		gainNode.gain.value = 0.1;
@@ -104,28 +113,37 @@ socket.on('play', function(data) {
 	}
 });
 
+// When device motion is triggered
 socket.on('deviceData', function(data){
-	var lr = Math.ceil(data.lr); // to offset the -180deg
+	// store orientation data
+	var lr = Math.ceil(data.lr);
 	var fb = Math.ceil(data.fb) + 90; // to offset the -90deg
 	dir = Math.ceil(data.dir);
 	
+	// get reference to shapes
 	var circle = document.querySelector("#circle");
 	var triangle = document.querySelector("#triangle");
 	var octagon = document.querySelector("#octagon");
 
+	// move shapes left or right on tilt
 	circle.style.left = ((lr * 100)/360) * 0.16 + 50 + "%";
 	octagon.style.left = ((lr * 100)/360) * 0.32  + 50 + "%";
 	triangle.style.left = ((lr * 100)/360) * 0.64 + 50 + "%";
 
+	// rotate shapes on device rotation
 	circle.style.transform = "rotate(" + dir + "deg) translate(-50%, -50%)";
 	octagon.style.transform = "rotate(" + dir + "deg) translate(-50%, -50%)";
 	triangle.style.transform = "rotate(" + dir + "deg) translate(-50%, -50%)";
 
+	// move shapes up or down on tilt
 	circle.style.top = (((fb - 90) * -100)/180) * 0.16 + 50 + "%";
 	octagon.style.top = (((fb - 90) * -100)/180) * 0.32 + 50 +"%";
 	triangle.style.top = (((fb - 90) * -100)/180) * 0.64 + 50 + "%";
 
+	// portamento factor adjusts the slide between pitches
 	var portamento = 0.9;
+
+	// check front/back value and set pitches of oscillators accordingly
 	setTimeout(function() {
 		if ( fb < 60) {
 			oscillator.frequency.value += (notes.g2 - oscillator.frequency.value) * portamento;
