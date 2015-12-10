@@ -1,5 +1,5 @@
 window.onload = init();
-var audioCtx, oscillator, oscillator2, oscillator3, oscillator4, oscillator5, gainNode, biquadFilter;
+var audioCtx, oscillator, oscillator2, oscillator3, oscillator4, oscillator5, gainNode;
 
 function init() {
 	audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -15,12 +15,6 @@ function init() {
 	oscillatord4 = audioCtx.createOscillator();
 	oscillatord5 = audioCtx.createOscillator();
 
-	biquadFilter = audioCtx.createBiquadFilter();
-	biquadFilter.type = "lowshelf";
-	biquadFilter.frequency.value = 1000;
-	biquadFilter.gain.value = 25;
-
-
 	gainNode = audioCtx.createGain();
 	gainNode.gain.value = 0; //reduce the volume by half
 
@@ -35,8 +29,6 @@ function init() {
 	oscillatord3.connect(gainNode);
 	oscillatord4.connect(gainNode);
 	oscillatord5.connect(gainNode);
-
-	biquadFilter.connect(gainNode);
 
 	gainNode.connect(audioCtx.destination);
 
@@ -59,8 +51,6 @@ function init() {
 	oscillator5.type = 'sawtooth';
 	oscillator5.frequency.value = 550;
 	oscillator5.start();
-
-
 
 	oscillatord.type = 'sawtooth'; // sine wave — other values are 'square', 'sawtooth', 'triangle' and 'custom'
 	oscillatord.frequency.value = 440; // value in hertz
@@ -86,6 +76,7 @@ function init() {
 	oscillatord5.frequency.value = 550;
 	oscillatord5.detune.value = 10;
 	oscillatord5.start();
+	
 }
 
 var notes = {
@@ -102,31 +93,37 @@ var notes = {
 			g3: 196
 		};
 
-
-
 var dir;
 var socket = io.connect();
-socket.on('message', function(data){
-    console.log(data.letter);
-});
 
 socket.on('play', function(data) {
 	if (data.play) {
-		gainNode.gain.value = 0.3;
+		gainNode.gain.value = 0.1;
 	} else {
 		gainNode.gain.value = 0;
 	}
 });
 
 socket.on('deviceData', function(data){
-	var lr = Math.ceil(data.lr) + 180; // to offset the -180deg
+	var lr = Math.ceil(data.lr); // to offset the -180deg
 	var fb = Math.ceil(data.fb) + 90; // to offset the -90deg
 	dir = Math.ceil(data.dir);
-	$("#lr").text(lr);
-	$("#fb").text(fb);
-	$("#dir").text(dir);
+	
+	var circle = document.querySelector("#circle");
+	var triangle = document.querySelector("#triangle");
+	var octagon = document.querySelector("#octagon");
 
-	//gainNode.gain.value = lr / 360; //set volume with max 0.5
+	circle.style.left = ((lr * 100)/360) * 0.16 + 50 + "%";
+	octagon.style.left = ((lr * 100)/360) * 0.32  + 50 + "%";
+	triangle.style.left = ((lr * 100)/360) * 0.64 + 50 + "%";
+
+	circle.style.transform = "rotate(" + dir + "deg) translate(-50%, -50%)";
+	octagon.style.transform = "rotate(" + dir + "deg) translate(-50%, -50%)";
+	triangle.style.transform = "rotate(" + dir + "deg) translate(-50%, -50%)";
+
+	circle.style.top = (((fb - 90) * -100)/180) * 0.16 + 50 + "%";
+	octagon.style.top = (((fb - 90) * -100)/180) * 0.32 + 50 +"%";
+	triangle.style.top = (((fb - 90) * -100)/180) * 0.64 + 50 + "%";
 
 	var portamento = 0.9;
 	setTimeout(function() {
@@ -168,5 +165,4 @@ socket.on('deviceData', function(data){
 			oscillatord5.frequency.value += (notes.fSharp4 - oscillatord5.frequency.value) * portamento;
 		}
 	}, 60);
-	biquadFilter.frequency.value = lr;
 })

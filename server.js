@@ -68,6 +68,34 @@ var path = url.parse(request.url).pathname;
 				}
 			})
 			break;
+		case '/styles/style.css':
+			fs.readFile(__dirname + path, function(error, data) {
+				if (error){
+					response.writeHead(404);
+					response.write("oops this doesn't exist - 404");
+					response.end();
+				}
+				else {
+					response.writeHead(200, {'Content-Type': "text/css"});
+					response.write(data, "utf8");
+					response.end();
+				}
+			})
+			break;
+		case '/scripts/main.js':
+			fs.readFile(__dirname + path, function(error, data) {
+				if (error){
+					response.writeHead(404);
+					response.write("oops this doesn't exist - 404");
+					response.end();
+				}
+				else {
+					response.writeHead(200, {'Content-Type': "text/html"});
+					response.write(data, "utf8");
+					response.end();
+				}
+			})
+			break;
 		default:
 			response.writeHead(404);
 			response.write("oops this doesn't exist! - 404");
@@ -80,10 +108,8 @@ server.listen(8001);
 
 var listener = io.listen(server);
 listener.sockets.on('connection', function(socket){
-    //socket.emit('message', {'message': 'hello world'});
     socket.on('client_data', function(data){
-    	//process.stdout.write(data.letter);
-    	socket.broadcast.emit('message', data);
+    
     });
     socket.on('deviceMove', function(data){
     	socket.broadcast.emit('deviceData', data);
@@ -91,5 +117,6 @@ listener.sockets.on('connection', function(socket){
 
     socket.on('playMusic', function(data) {
     	socket.broadcast.emit('play', data);
+    	socket.emit('connect', {'init': true});
     })
 });

@@ -1,0 +1,179 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+/* end reset */
+
+html {
+	font-family: 'Circular', sans-serif;
+	color: #F1E8D9;
+	background: #EB7C61;
+	font-size: 24px;
+}
+
+h1 {
+	font-size: 2.4em;
+	margin-bottom: 0.6em;
+}
+
+p {
+	/*line-height: 1.2em;*/
+}
+
+button {
+	font-family: 'Circular', sans-serif;
+	font-size: 24px;
+	background: none;
+	outline: none;
+	border: 0;
+	color: #414551;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+.intro-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 100vw;
+	background: #EB7C61;
+	z-index: 10;
+}
+
+.intro-inner, .about-inner {
+	position: absolute;
+	width: 90%;
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 1.6em;
+	text-align: center;
+	border: 10px solid #67657A;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.about-inner-left, .about-inner-right {
+	float: left;
+	width: 50%;
+}
+
+.main-container {
+	height: 100vh;
+	/*transform: translate3d(0, -125px, 0);*/
+}
+
+.main-logo {
+	position: absolute;
+	top: 20px;
+	left: 40px;
+}
+
+#about-btn {
+	position: absolute;
+	top: 20px;
+	right: 40px;
+	line-height: 57.6px;
+}
+
+.about-container {
+	position: absolute;
+	top: 0;
+	height: 100vh;
+	width: 100vw;
+	background: #EB7C61;
+	text-align: center;
+}
+
+.about-close {
+	padding-top: 1.2em;
+}
+
+#circle{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	transform-origin: 0% 0%;
+}
+
+#triangle {
+	position: absolute;
+	top: 50%;
+	left: 25%;
+	transform: translate(-50%, -50%);
+	transform-origin: 0% 0%;
+}
+
+#octagon {
+	position: absolute;
+	top: 50%;
+	left: 75%;
+	transform: translate(-50%, -50%);
+	transform-origin: 0% 0%;
+}
+
+/* always present */
+.slide-transition {
+  transition: all .3s ease-in-out;
+  opacity: 0.95;
+}
+
+/* .expand-enter defines the starting state for entering */
+/* .expand-leave defines the ending state for leaving */
+.slide-enter, .slide-leave {
+	opacity: 0;
+	transform: scale(0.9);
+}

@@ -41,6 +41,7 @@ camera.position.z = 60;
 console.log(plane);
 
 function render() {
+	plane.rotation.z += 0.01;
 	requestAnimationFrame( render );
 	renderer.render( scene, camera );
 }
